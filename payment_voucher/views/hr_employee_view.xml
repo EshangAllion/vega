@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_hr_employee_view_inherit_internal" model="ir.ui.view">
+        <field name="name">view.hr.employee.form.inherit.internal</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="partner_id" />
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="create_partner" string="Create Partner" type="object" class="oe_highlight"
+                attrs="{'invisible': [('partner_id', '!=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

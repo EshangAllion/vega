@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--  Petty cash out Search view      -->
+        <record id="view_petty_cash_out_filter" model="ir.ui.view">
+            <field name="name">petty.cash.out.search</field>
+            <field name="model">petty.cash.out</field>
+            <field name="arch" type="xml">
+                <search string="Petty Cash">
+                    <field name="name" string="Name" filter_domain="['|',('name', 'ilike', self),('employee_id', 'ilike', self)]"/>
+                    <field name="employee_id" string="Employee" filter_domain="[('employee_id', 'ilike', self)]"/>
+                    <field name="state"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]" />
+                    <filter string="awaiting_approval" name="awaiting_approval" domain="[('state', '=', 'awaiting_approval')]" />
+                    <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]" />
+                    <filter string="Done" name="done" domain="[('state', '=', 'done')]" />
+                    <filter string="Cancel" name="cancel" domain="[('state', '=', 'cancel')]" />
+                    <separator/>
+                        <filter string="Date" name="cash_dates" date="cash_date"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" name="employee_id" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="reason" name="reason" domain="[]" context="{'group_by': 'reason'}"/>
+                        <filter string="Petty cash" name="petty cash" domain="[]" context="{'group_by': 'petty_cash_id'}"/>
+                        <filter string="Date" name="cash_date" domain="[]" context="{'group_by': 'cash_date'}"/>
+                        <filter string="Status" name="status" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+             </field>
+        </record>
+    <!--     Patty cash out form view   -->
+        <record id="view_petty_cash_out_form" model="ir.ui.view">
+            <field name="name">petty.cash.out.form</field>
+            <field name="model">petty.cash.out</field>
+            <field name="arch" type="xml">
+                <form string="Petty Cash" >
+                    <header>
+                        <field name="is_exceed_the_minimum"  invisible="1"   />
+                        <button name="button_awaiting_approval_petty_cash_out" type="object" string="Request Approval" class="oe_highlight" groups="petty_cash.petty_cash_group_assistant" attrs="{'invisible':['|',('state','!=','draft'),('is_exceed_the_minimum','=',False)]}"/>
+                        <button name="button_reimbursement_petty_cash_out" type="object" string="Cash Issue" class="oe_highlight" groups="petty_cash.petty_cash_group_assistant" attrs="{'invisible':['|',('state','!=','draft'),('is_exceed_the_minimum','=',True)]}"/>
+                        <button name="button_approve_petty_cash_out" type="object" string="Approve" class="oe_highlight" groups="petty_cash.petty_cash_group_manager" attrs="{'invisible':[('state','!=','awaiting_approval')]}"/>
+                        <button name="button_function_set_to_draft" type="object" class="btn btn-danger" string="Set To Draft"  groups="petty_cash.petty_cash_group_assistant" attrs="{'invisible':[('state','!=','reject')]}"/>
+                        <button name="button_reject_petty_cash_out" type="object" string="Reject" class="btn btn-danger" groups="petty_cash.petty_cash_group_manager" attrs="{'invisible':[('state','!=','awaiting_approval')]}"/>
+                        <button name="button_reimbursement_petty_cash_out" type="object" string="Cash Issue" class="oe_highlight" groups="petty_cash.petty_cash_group_assistant" attrs="{'invisible':['|',('state','!=','approved'),('is_exceed_the_minimum','=',False)]}"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,awaiting_approval,approved,reject,complete"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <field name="move_id"  invisible="1"   />
+                            <button name="button_view_journal_entries" icon="fa-bar-chart-o" class="oe_stat_button" string="Journal Entries" type="object" attrs="{'invisible':[('move_id','=',[])]}"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1 class="d-flex">
+                                <field name="name" placeholder="Name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="is_wizard"  invisible="1"/>
+                                <field name="petty_cash_id" domain="[('state','=','in_progress')]" options="{'no_create': True, 'no_create_edit':True }" attrs="{'readonly':['|',('state','!=','draft'),('is_wizard','=',True)]}"/>
+
+                                <field name="reason" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="remarks" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="user_id" readonly="1" force_save="1" />
+                                <field name="company_id" invisible="1"/>
+                                <field name="currency_id" invisible="1"/>
+
+                            </group>
+                            <group>
+                                <field name="employee_id" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True, 'no_create_edit':True }"/>
+                                <field name="cash_date" attrs="{'invisible':[('state','not in',('released','paid','done'))], 'readonly':[('state','in',('paid','done','cancel'))]}"  />
+                                <field name="approved_by" attrs="{'invisible':[('approved_by','=',False)]}" readonly="1" force_save="1"/>
+                                <field name="approver_comment" attrs="{'invisible':[('approver_comment','=',False)]}" readonly="1"/>
+                                <field name="approved_date"  attrs="{'invisible':[('approved_date','=',False)]}" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Expenses">
+                                <field name="expenses_line" attrs="{'readonly':[('state','not in',('draft'))]}">
+                                    <tree editable="top">
+                                        <field name="name" />
+                                        <field name="cash_out_id" invisible="1"/>
+                                        <field name="expense_account_id" options="{'no_create': True, 'no_create_edit':True }"/>
+                                        <field name="account_analytic_id" options="{'no_create': True, 'no_create_edit':True }"/>
+                                        <field name="attachment_id" widget="many2many_binary"/>
+                                        <field name="amount" />
+                                    </tree>
+                                </field>
+                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                    <group colspan="4"/>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="cash_total">
+                                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                            <label for="expensed_amount" />
+                                        </div>
+                                        <field name="expensed_amount" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </group>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_petty_cash_out_tree" model="ir.ui.view">
+            <field name="name">petty.cash.out.tree</field>
+            <field name="model">petty.cash.out</field>
+            <field name="arch" type="xml">
+                <tree string="Petty cash" >
+                    <field name="name" />
+                    <field name="petty_cash_id" />
+                    <field name="employee_id" />
+                    <field name="reason" />
+                    <field name="expensed_amount"  sum="Total Expensed" />
+                    <field name="is_approve" invisible="1"/>
+                    <field name="state" />
+                    <field name="approved_by" optional="hide"/>
+                    <field name="approver_comment" optional="hide"/>
+                    <field name="approved_date" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--   action petty cash Out     -->
+        <record id="action_petty_cash_out" model="ir.actions.act_window">
+            <field name="name">Reimbursement</field>
+            <field name="res_model">petty.cash.out</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_petty_cash_out_filter"/>
+            <field name="context">{'create': False}</field>
+            <field name="help" type="html">
+             <p class="o_view_nocontent_smiling_face">
+               Add a Reimbursement Record
+             </p>
+            </field>
+        </record>
+
+        <!--   action petty cash Out for multiple approval    -->
+        <record id="action_petty_cash_out_multi_approve" model="ir.actions.act_window">
+            <field name="name">Reimbursement</field>
+            <field name="res_model">petty.cash.out</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_petty_cash_out_filter"/>
+            <field name="domain">[('is_approve', '=', True)]</field>
+            <field name="context">{'create': False}</field>
+            <field name="help" type="html">
+             <p class="o_view_nocontent_smiling_face">
+               Add a Reimbursement Record
+             </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Approvar User wizard and action-->
+    <record id="petty_cash_approver_user_wizard_form" model="ir.ui.view">
+        <field name="name">petty.cash.approver.user.wizard.form</field>
+        <field name="model">petty.cash.approver.user.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send to Approval">
+                <sheet>
+                    <h2>Select an approver</h2>
+                    <group>
+                        <group>
+                            <field name="user_id" widget='selection'/>
+                            <field name="model_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string='Submit' name="approval_submission" type="object" class="btn-primary"/>
+                    <button string="Abort" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="petty_cash_approver_wizard_action" model="ir.actions.act_window">
+        <field name="name">Send to Approval</field>
+        <field name="res_model">petty.cash.approver.user.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="petty_cash_approver_user_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

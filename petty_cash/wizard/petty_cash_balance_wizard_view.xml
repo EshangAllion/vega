@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--  petty cash balance wizard and action-->
+    <record id="petty_cash_balance_wizard_form" model="ir.ui.view">
+        <field name="name">petty.cash.balance.wizard.form</field>
+        <field name="model">petty.cash.balance.wizard</field>
+        <field name="arch" type="xml">
+            <form >
+                <sheet>
+                    <h2>Petty Cash Drawer Balance</h2>
+                    <div>
+                        <p>
+
+                        </p>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id" widget='selection'  readonly="1" force_save="1"/>
+                            <field name="petty_cash_id"  readonly="1" force_save="1" />
+                            <field name="journal_id" readonly="1" force_save="1"/>
+                        </group>
+                        <group>
+                            <field name="cash_balance"  readonly="1" force_save="1"/>
+                            <field name="return_journal" required="1"/>
+                            <field name="note" />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string='Submit' name="approval_submission" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="petty_cash_balance_wizard_action" model="ir.actions.act_window">
+        <field name="name">Balance Petty Cash</field>
+        <field name="res_model">petty.cash.balance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="petty_cash_balance_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

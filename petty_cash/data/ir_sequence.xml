@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for petty cash top up -->
+        <record id="seq_petty_cash_top_up" model="ir.sequence">
+            <field name="name">Petty Cash Top UP</field>
+            <field name="code">petty.cash.topup</field>
+            <field name="prefix">TOP/%(day)s/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="True"/>
+        </record>
+
+        <!-- Sequences for petty cash IOU Request -->
+        <record id="seq_petty_cash_iou_request" model="ir.sequence">
+            <field name="name">Petty Cash IOU</field>
+            <field name="code">petty.cash.iou</field>
+            <field name="prefix">IOU/%(day)s/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="True"/>
+        </record>
+
+        <!-- Sequences for petty cash Reimbursement -->
+        <record id="seq_petty_cash_reimbursement" model="ir.sequence">
+            <field name="name">Petty Cash Rem</field>
+            <field name="code">petty.cash.rem</field>
+            <field name="prefix">REIM/%(day)s/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="True"/>
+        </record>
+    </data>
+</odoo>

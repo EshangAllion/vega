@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_voucher,access.payment.voucher,model_payment_voucher,base.group_user,1,1,1,1
+access_payment_voucher_lines,access.payment.voucher.line,model_payment_voucher_line,base.group_user,1,1,1,1
+access_payment_voucher_approver_user_wizard,access.payment.voucher.approver.user.wizard,model_payment_voucher_approver_user_wizard,base.group_user,1,1,1,1
+access_payment_voucher_approve_comment_wizard,access.payment.voucher.approve.comment.wizard,model_payment_voucher_approve_comment_wizard,base.group_user,1,1,1,1
+
+
+

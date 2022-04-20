@@ -1,0 +1,29 @@
+<odoo>
+
+        <record id="action_account_journal_form_petty_cash" model="ir.actions.act_window">
+                <field name="name">Journals</field>
+                <field name="res_model">account.journal</field>
+                <field name="view_mode">tree,kanban,form</field>
+                <field name="domain">[("is_petty_cash", "=", True)]</field>
+                <field name="context">{"default_is_petty_cash":True}</field>
+        </record>
+
+        <!--   Main menu     -->
+        <menuitem id="petty_cash_main_menu" name="Petty Cash"  groups="petty_cash.petty_cash_group_user_own" parent="account_accountant.menu_accounting" sequence="3"/>
+
+        <!--  Petty cash Issue menu     -->
+        <menuitem id="petty_cash_petty_cash_menu" name="Petty Cash Drawer" parent="petty_cash_main_menu" action="action_petty_cash" sequence="1"/>
+
+
+         <!--  Petty cash Report      -->
+        <menuitem id="petty_cash_report_menu" name="Report" parent="petty_cash_main_menu" sequence="2"/>
+        <menuitem id="petty_cash_petty_cash_in_menu" name="Top Up" parent="petty_cash_report_menu" action="action_petty_cash_in" sequence="1"/>
+        <menuitem id="petty_cash_cash_out_menu" name="IOU Request" parent="petty_cash_report_menu" action="action_petty_cash_release" sequence="2"/>
+        <menuitem id="petty_cash_petty_cash_out_menu" name="Reimbursement" parent="petty_cash_report_menu" action="action_petty_cash_out" sequence="3"/>
+        <menuitem id="petty_cash_employee_menu" name="Employee Wise Report" parent="petty_cash_report_menu" action="action_hr_employee_petty_cash" sequence="5"/>
+        <!--   Configurations  menu     -->
+        <menuitem id="petty_cash_configurations_menu" name="Configurations" parent="petty_cash_main_menu" sequence="10"/>
+        <menuitem id="menu_account_config" name="Settings" action="account.action_account_config" groups="petty_cash.petty_cash_group_manager" parent="petty_cash_configurations_menu" sequence="0"/>
+        <menuitem id="petty_cash_petty_cash_reason_menu" name="Reimbursement Reason" parent="petty_cash_configurations_menu" action="action_petty_cash_reason" sequence="1"/>
+        <menuitem id="menu_action_account_journal_form" action="action_account_journal_form_petty_cash" groups="petty_cash.petty_cash_group_manager" parent="petty_cash_configurations_menu" sequence="5"/>
+</odoo>

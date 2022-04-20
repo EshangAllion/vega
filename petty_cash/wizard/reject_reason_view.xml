@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Cancel Reason User wizard and action-->
+    <record id="petty_cash_cancel_reason_wizard_form" model="ir.ui.view">
+        <field name="name">petty.cash.draft.reason.wizard.form</field>
+        <field name="model">petty.cash.draft.reason</field>
+        <field name="arch" type="xml">
+            <form string="Send to Approval">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="user_id" widget='selection' readonly="1" force_save="1"/>
+                            <field name="cancel_reason" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string='Submit' name="approval_submission" type="object" class="btn-primary"/>
+                    <button string="Abort" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="petty_cash_cancel_reason_wizard_action" model="ir.actions.act_window">
+        <field name="name">Set To Draft</field>
+        <field name="res_model">petty.cash.draft.reason</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="petty_cash_cancel_reason_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

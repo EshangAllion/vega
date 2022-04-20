@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--  Petty cash in Search view      -->
+        <record id="view_petty_cash_in_filter" model="ir.ui.view">
+            <field name="name">petty.cash.in.search</field>
+            <field name="model">petty.cash.in</field>
+            <field name="arch" type="xml">
+                <search string="Petty Cash">
+                    <field name="name" string="Name" filter_domain="['|',('name', 'ilike', self),('petty_cash_id', 'ilike', self)]"/>
+                    <field name="amount" string="Amount" filter_domain="[('amount', 'ilike', self)]"/>
+                    <field name="amount"/>
+                    <field name="journal_id"/>
+                    <field name="state"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]" />
+                    <filter string="Confirm" name="Sent to approval" domain="[('state', '=', 'awaiting_approval')]" />
+                    <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]" />
+                    <filter string="Topped Up" name="toppedup" domain="[('state', '=', 'toppedup')]" />
+                    <filter string="Cancel" name="reject" domain="[('state', '=', 'reject')]" />
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Petty cash" name="petty cash" domain="[]" context="{'group_by': 'petty_cash_id'}"/>
+                        <filter string="Account From" name="account" domain="[]" context="{'group_by': 'journal_id'}"/>
+                        <filter string="Status" name="status" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+             </field>
+        </record>
+    <!--     Patty cash IN form view   -->
+        <record id="view_petty_cash_in_form" model="ir.ui.view">
+            <field name="name">petty.cash.in.form</field>
+            <field name="model">petty.cash.in</field>
+            <field name="arch" type="xml">
+                <form string="Petty Cash" >
+                    <header>
+                        <button name="button_awaiting_approval_petty_cash_in" type="object" string="Send to approval" class="oe_highlight" groups="petty_cash.petty_cash_group_assistant" attrs="{'invisible':[('state','!=','draft')]}"/>
+                        <button name="button_approve_petty_cash_in" type="object" string="Approve" class="oe_highlight" groups="petty_cash.petty_cash_group_manager" attrs="{'invisible':[('state','!=','awaiting_approval')]}"/>
+                        <button name="set_to_draft" type="object" string="Set to Draft" class="btn btn-danger" groups="petty_cash.petty_cash_group_assistant" attrs="{'invisible':[('state','!=','reject')]}"/>
+                        <button name="button_petty_cash_toppedup" type="object" string="Top Up" class="oe_highlight" groups="petty_cash.petty_cash_group_assistant" attrs="{'invisible':[('state','!=','approved')]}"/>
+                        <button name="button_reject_petty_cash_in"  type="object" string="Reject" class="btn btn-danger" groups="petty_cash.petty_cash_group_manager" attrs="{'invisible':[('state','!=','awaiting_approval')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,awaiting_approval,approved,reject,toppedup"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <field name="move_id"  invisible="1"   />
+                            <button name="button_view_journal_entries" icon="fa-bar-chart-o" class="oe_stat_button" string="Journal Entries" type="object" attrs="{'invisible':[('state','!=','toppedup')]}"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1 class="d-flex">
+                                <field name="name" placeholder="Name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="is_wizard"  invisible="1"/>
+                                <field name="petty_cash_id" domain="[('state','=','in_progress')]" options="{'no_create':True}"  attrs="{'readonly':['|',('state','!=','draft'),('is_wizard','=',True)]}"/>
+                                <field name="petty_cash_journal_id"  invisible="1"/>
+                                <field name="journal_id"  attrs="{'invisible':[('state','=','draft')], 'readonly':[('state','!=','awaiting_approval')]}" options="{'no_create': True, 'no_create_edit':True }"/>
+                                <field name="reason"  attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True, 'no_create_edit':True }"/>
+                                <field name="amount" required="1"  attrs="{'readonly':[('state','!=','draft')]}" />
+
+                            </group>
+                            <group>
+                                <field name="request_date"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="cash_date" attrs="{'invisible':[('cash_date','=',False)]}" readonly="1"/>
+                                <field name="approved_by" attrs="{'invisible':[('approved_by','=',False)]}" readonly="1"/>
+                                <field name="approver_comment"  attrs="{'invisible':[('approver_comment','=',False)]}" readonly="1"/>
+                                <field name="approved_date"  attrs="{'invisible':[('approved_date','=',False)]}" readonly="1"/>
+                                <field name="user_id"   attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True, 'no_create_edit':True }" readonly="1" force_save="1"  />
+                                <field name="company_id"  attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True, 'no_create_edit':True }" invisible="1" />
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_petty_cash_in_tree" model="ir.ui.view">
+            <field name="name">petty.cash.in.tree</field>
+            <field name="model">petty.cash.in</field>
+            <field name="arch" type="xml">
+                <tree string="Petty cash" >
+                    <field name="name" />
+                    <field name="petty_cash_id" />
+                    <field name="request_date" string="Requested Date"/>
+                    <field name="user_id" string="Requested User"/>
+                    <field name="amount"  sum="Total" />
+                    <field name="state" />
+                    <field name="approved_by" optional="hide"/>
+                    <field name="approver_comment" optional="hide"/>
+                    <field name="approved_date" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--   action petty cash IN     -->
+        <record id="action_petty_cash_in" model="ir.actions.act_window">
+            <field name="name">Top Up</field>
+            <field name="res_model">petty.cash.in</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'create': False}</field>
+            <field name="search_view_id" ref="view_petty_cash_in_filter"/>
+            <field name="help" type="html">
+             <p class="o_view_nocontent_smiling_face">
+               Add a Petty cash Out Record
+             </p>
+            </field>
+        </record>
+
+        <!--   action petty cash IN  from petty cash drawer   -->
+        <record id="action_petty_cash_in_from_drawer" model="ir.actions.act_window">
+            <field name="name">Top Up</field>
+            <field name="res_model">petty.cash.in</field>
+            <field name="view_mode">form,tree</field>
+        </record>
+
+        <record id="action_petty_cash_in_by_petty_cash" model="ir.actions.act_window">
+            <field name="name">Top Up</field>
+            <field name="res_model">petty.cash.in</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'create': False, 'default_is_wizard': True}</field>
+            <field name="domain">[('petty_cash_id', '=', active_id)]</field>
+        </record>
+    </data>
+</odoo>

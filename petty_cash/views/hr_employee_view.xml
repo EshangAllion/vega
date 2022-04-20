@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_employee_filter" model="ir.ui.view">
+            <field name="name">hr.employee.search</field>
+            <field name="model">hr.employee</field>
+            <field name="arch" type="xml">
+                <search string="Employees">
+                    <field name="name" string="Employee" filter_domain="['|', ('work_email', 'ilike', self), ('name', 'ilike', self)]"/>
+                    <field name="category_ids" groups="hr.group_hr_user"/>
+                    <field name="job_id"/>
+                    <separator/>
+                    <filter string="Pay to employee" name="pay_to_employee" domain="[('pay_petty_cash', '&gt;', 0)]"/>
+                    <filter string="balanced" name="pay_balance" domain="[('pay_petty_cash', '=', 0.00)]"/>
+                    <filter string="Pay to Company" name="pay_from" domain="[('pay_petty_cash', '&lt;', 0.00)]"/>
+                    <separator/>
+                    <filter invisible="1" string="Late Activities" name="activities_overdue"
+                        domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Today Activities" name="activities_today"
+                        domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                        domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_manager" string="Manager" domain="[]" context="{'group_by': 'parent_id'}"/>
+                        <filter name="group_department" string="Department" domain="[]" context="{'group_by': 'department_id'}"/>
+                        <filter name="group_job" string="Job" domain="[]" context="{'group_by': 'job_id'}"/>
+                    </group>
+                </search>
+             </field>
+        </record>
+
+        <record id="view_hr_employee_petty_cash_form" model="ir.ui.view">
+            <field name="name">hr.employee.form.petty.cash</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <field name="cash_issue_ids"  invisible="1"   />
+                    <button name="button_view_cash_issues" icon="fa-bar-chart-o" class="oe_stat_button" string="IOU Requests" type="object" attrs="{'invisible':[('cash_issue_ids','=',[])]}"/>
+
+                    <field name="cash_out_ids"  invisible="1"   />
+                    <button name="button_view_cash_out" icon="fa-bar-chart-o" class="oe_stat_button" string="Reimbursements" type="object" attrs="{'invisible':[('cash_out_ids','=',[])]}"/>
+
+                </xpath>
+                <xpath expr="//field[@name='department_id']" position="before">
+
+                    <field name="issued_petty_cash" invisible="1"/>
+                    <field name="expensed_petty_cash" invisible="1"/>
+                    <field name="pay_to_employee"/>
+                    <field name="cash_issue_ids" invisible="1"/>
+                    <field name="cash_out_ids" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Employee tree by manager -->
+        <record id="view_hr_employee_petty_cash_tree" model="ir.ui.view">
+            <field name="name">hr.employee.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="arch" type="xml">
+                <tree string="Employees" create="1">
+                    <field name="name"/>
+                    <field name="work_phone" class="o_force_ltr" invisible="1"/>
+                    <field name="work_email" invisible="1"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <field name="issued_petty_cash" invisible="1"/>
+                    <field name="expensed_petty_cash" invisible="1"/>
+                    <field name="pay_to_employee"/>
+                    <field name="coach_id" invisible="1"/>
+                    <field name="parent_id" invisible="1"/>
+                    <field name="pay_petty_cash" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--   action inherited_employee view    -->
+        <record id="action_hr_employee_petty_cash" model="ir.actions.act_window">
+            <field name="name">Employees </field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_employee_petty_cash_tree"/>
+            <field name="search_view_id" ref="view_employee_filter"/>
+        </record>
+
+</odoo>

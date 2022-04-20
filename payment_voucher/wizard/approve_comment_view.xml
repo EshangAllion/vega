@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Comment wizard and action-->
+    <record id="payment_voucher_comment_wizard_form" model="ir.ui.view">
+        <field name="name">payment.voucher.comment.wizard.form</field>
+        <field name="model">payment.voucher.approve.comment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Your Comment">
+                <sheet>
+                    <h2>Add Your Comment</h2>
+                    <group>
+                        <group>
+                            <field name="comment" attrs="{'required': [('action', '=', ('Rejected'))]}"/>
+                            <field name="voucher_id" invisible="1"/>
+                            <field name="model_id" invisible="1"/>
+                            <field name="action" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string='Submit' name="approval_submission" type="object" class="btn-primary"/>
+                    <button string="Abort" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="payment_voucher_comment_wizard_action" model="ir.actions.act_window">
+        <field name="name">Add Your Comment</field>
+        <field name="res_model">payment.voucher.approve.comment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="payment_voucher_comment_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

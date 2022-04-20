@@ -1,0 +1,229 @@
+<odoo>
+    <!--    Email templates for Payment Voucher Pending Approval-->
+    <record id="mail_template_for_payment_voucher_approval" model="mail.template">
+        <field name="name">Email for Payment Voucher Approval</field>
+        <field name="email_from">{{user.email}}</field>
+        <field name="subject">Approval of Payment Voucher {{ object.voucher_id.name }}</field>
+        <field name="email_to">{{ object.user_id.email }}</field>
+        <field name="model_id" ref="model_payment_voucher_approver_user_wizard"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                </head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;">
+
+                                  </span>
+                              </td>
+                              <td valign="middle" align="right">
+                                  <img  t-attf-src="/logo.png?company={{object.create_uid.company_id.id}}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="<t t-out="object.create_uid.company_id.name}}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                            <tbody>
+                                 <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                <p>Hi <t t-out="object.user_id.display_name"/>,</p><br/>
+
+                                    There is a payment voucher for your approval. Please do the needful.</p><br/>
+                                    <p>Please <a attf-href="{{object.voucher_id.custom_url}}" target="_blank"><b>Click Here</b></a>  to visit.</p>
+
+                                <p>Thank you</p>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <t t-out="object.create_uid.company_id.name"/><br/>
+                                <t t-out="object.create_uid.company_id.phone"/>
+
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <a href="mailto:{{ object.create_uid.company_id.email }}" style="text-decoration:none; color: white;" t-out="object.create_uid.company_id.email"/><br/>
+                                    <a t-attf-href="{{ object.create_uid.company_id.website}}" style="text-decoration:none; color: white;" t-out="object.create_uid.company_id.website"/>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+                ]]>
+        </field>
+    </record>
+
+    <!--    Email templates for Payment Voucher Approval-->
+    <record id="mail_template_for_approved_payment_voucher" model="mail.template">
+        <field name="name">Email to after Approve Payment Voucher</field>
+        <field name="email_from">{{ user.email }}</field>
+        <field name="subject">Payment Voucher {{ object.voucher_id.name }} has Approved</field>
+        <field name="email_to">{{ object.voucher_id.create_uid.email }}</field>
+        <field name="model_id" ref="model_payment_voucher_approve_comment_wizard"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                </head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;">
+
+                                  </span>
+                              </td>
+                              <td valign="middle" align="right">
+                                  <img t-attf-src="/logo.png?company={{ object.create_uid.company_id.id }}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="{{ object.create_uid.company_id.name }}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                            <tbody>
+                                 <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                <p>Hi <t t-out="object.voucher_id.create_uid.display_name" />,</p><br/>
+
+                                    The Payment Voucher has been approved. You can proceed.</p><br/>
+                                    <p>Please <a t-attf-href="{{object.voucher_id.custom_url }}" target="_blank"><b>Click Here</b></a>  to visit.</p>
+
+                                <p>Thank you</p>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <t t-out="object.create_uid.company_id.name"/><br/>
+                                <t t-out="object.create_uid.company_id.phone"/>
+
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <a href="mailto:{{ object.create_uid.company_id.email }}" style="text-decoration:none; color: white;" t-out="object.create_uid.company_id.email"/><br/>
+                                    <a t-attf-href="{{ object.create_uid.company_id.website}}" style="text-decoration:none; color: white;" t-out="object.create_uid.company_id.website"/>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+                ]]>
+        </field>
+    </record>
+
+    <!--    Email templates for Payment Voucher Rejection-->
+    <record id="mail_template_for_reject_payment_voucher" model="mail.template">
+        <field name="name">Email to after Cancel Payment Voucher</field>
+        <field name="email_from">{{ user.email}}</field>
+        <field name="subject">Payment Voucher {{ object.voucher_id.name }} has Rejected</field>
+        <field name="email_to">{{ object.voucher_id.create_uid.email }}</field>
+        <field name="model_id" ref="model_payment_voucher_approve_comment_wizard"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                </head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;">
+
+                                  </span>
+                              </td>
+                              <td valign="middle" align="right">
+                                  <img t-attf-src="/logo.png?company={{object.create_uid.company_id.id}}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="{{object.create_uid.company_id.name}}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                            <tbody>
+                                 <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                <p>Hi <t t-out="object.voucher_id.create_uid.display_name" />,</p><br/>
+
+                                    The Payment Voucher has been rejected.</p><br/>
+                                    <p>Please <a t-attf-href="{{object.voucher_id.custom_url}}" target="_blank"><b>Click Here</b></a>  to visit.</p>
+
+                                <p>Thank you</p>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <t t-out="object.create_uid.company_id.name"/><br/>
+                                <t t-out="object.create_uid.company_id.phone"/>
+
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <a href="mailto:{{ object.create_uid.company_id.email }}" style="text-decoration:none; color: white;" t-out="object.create_uid.company_id.email"/><br/>
+                                    <a t-attf-href="{{ object.create_uid.company_id.website}}" style="text-decoration:none; color: white;" t-out="object.create_uid.company_id.website"/>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+                ]]>
+        </field>
+    </record>
+</odoo>

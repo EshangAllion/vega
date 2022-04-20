@@ -1,0 +1,309 @@
+<odoo>
+    <!--    Email templates for petty cash out  Pending Approval-->
+    <record id="mail_template_for_petty_cash_out_approval" model="mail.template">
+        <field name="name">Email for Petty Cash Out Approval</field>
+        <field name="email_from">{{user.email}}</field>
+        <field name="subject">{{ctx['subject']}}</field>
+        <field name="email_to">{{ctx['mail_to']}}</field>
+        <field name="model_id" ref="model_petty_cash_approver_user_wizard"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                </head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;">
+
+                                  </span>
+                              </td>
+                              <td valign="middle" align="right">
+                                   <img  t-attf-src="/logo.png?company={{object.create_uid.company_id.id}}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="'%s ' %{{object.create_uid.company_id.name}}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                            <tbody>
+                                 <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                <p>Hi <t t-out="object.user_id.display_name" />,</p><br/>
+                                   <p><t t-out="ctx['msg_type']" /><br/>
+                                            <t t-if="ctx.get('msg_type2')">
+                                                <t t-out="ctx['msg_type2']" />
+                                            </t> </p><br/> </p><br/>
+                                    <p>Please <a  t-attf-href="{{ ctx['custom_url'] }}" target="_blank"><b>Click Here</b></a>  to visit.</p>
+
+                                <p>Thank you</p>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                              <t t-out="object.create_uid.company_id.name or ''">+1 650-123-4567</t><br/>
+                              <t t-out="object.create_uid.company_id.phone or ''"/>
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <a t-attf-href="'mailto: %s'{{ object.create_uid.company_id.email}}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.email or ''"/><br/>
+                                <a t-attf-href="{{ object.create_uid.company_id.website }}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.website or ''">http://www.example.com</a>
+
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+                ]]>
+        </field>
+    </record>
+
+    <!--    Email templates for petty cash Reject -->
+    <record id="mail_template_for_petty_cash_reject" model="mail.template">
+        <field name="name">Email for Petty Cash Reject Approval</field>
+        <field name="email_from">{{user.email}}</field>
+        <field name="subject">{{ctx['subject']}}</field>
+        <field name="email_to">{{ctx['mail_to']}}</field>
+        <field name="model_id" ref="model_petty_cash_draft_reason"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                </head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;"></span>
+                              </td>
+                              <td valign="middle" align="right">
+                                  <img  t-attf-src="/logo.png?company={{object.create_uid.company_id.id}}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="'%s ' %{{object.create_uid.company_id.name}}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                            <tbody>
+                                 <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                <p>Hi <t t-out="object.user_id.display_name" />,</p><br/>
+                                   <p><t t-out="ctx['msg_type']" /> </p><br/>
+                                    <p>Please <a  t-attf-href="{{ ctx['custom_url'] }}" target="_blank"><b>Click Here</b></a>  to visit.</p>
+                                <p>Thank you</p>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                              <t t-out="object.create_uid.company_id.name or ''">+1 650-123-4567</t><br/>
+                              <t t-out="object.create_uid.company_id.phone or ''"/>
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <a t-attf-href="'mailto: %s'{{ object.create_uid.company_id.email}}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.email or ''"/><br/>
+                                <a t-attf-href="{{ object.create_uid.company_id.website }}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.website or ''">http://www.example.com</a>
+
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+                ]]>
+        </field>
+    </record>
+
+    <!--    Email templates for approved petty cash In approved-->
+    <record id="mail_template_after_approved_petty_cash_in" model="mail.template">
+        <field name="name">Email to after Petty cash approve</field>
+        <field name="email_from">{{user.email}}</field>
+        <field name="subject">{{ctx['subject']}}</field>
+        <field name="email_to">{{ctx['mail_to']}}</field>
+        <field name="model_id" ref="model_petty_cash_approved_comment_wizard"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                </head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;">
+
+                                  </span>
+                              </td>
+                              <td valign="middle" align="right">
+                                  <img  t-attf-src="/logo.png?company={{object.create_uid.company_id.id}}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="'%s ' %{{object.create_uid.company_id.name}}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                            <tbody>
+                                 <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                <p>Hi <t t-out="object.user_id.display_name" />,</p><br/>
+                                   <p><t t-out="ctx['msg_type']" /><br/>
+
+                                    <p>Please <a  t-attf-href="{{ ctx['custom_url'] }}" target="_blank"><b>Click Here</b></a>  to visit.</p>
+                                <p>Thank you</p>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                              <t t-out="object.create_uid.company_id.name or ''">+1 650-123-4567</t><br/>
+                              <t t-out="object.create_uid.company_id.phone or ''"/>
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <a t-attf-href="'mailto: %s'{{ object.create_uid.company_id.email}}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.email or ''"/><br/>
+                                <a t-attf-href="{{ object.create_uid.company_id.website }}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.website or ''">http://www.example.com</a>
+
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+                ]]>
+        </field>
+    </record>
+
+    <!--    Email templates for Multiple petty cash out  Request Approval-->
+    <record id="mail_template_for_multi_petty_cash_out_approval" model="mail.template">
+        <field name="name">Email for Multi Petty Cash Out Approval</field>
+        <field name="email_from">{{user.email}}</field>
+        <field name="subject"> {{ctx['mail_subject']}}</field>
+        <field name="email_to">{{ctx['mail_to']}}</field>
+        <field name="model_id" ref="model_petty_cash_out"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html">
+            <![CDATA[
+                </head>
+                <body style="margin: 0; padding: 0;">
+                <table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+                    <tbody>
+
+                      <!-- HEADER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle">
+                                  <span style="font-size:20px; color:white; font-weight: bold;">
+
+                                  </span>
+                              </td>
+                              <td valign="middle" align="right">
+                                  <img  t-attf-src="/logo.png?company={{object.create_uid.company_id.id}}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="'%s ' %{{object.create_uid.company_id.name}}">
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- CONTENT -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
+                            <tbody>
+                                 <td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
+                                <p>Hi <t t-out="ctx['approver']"/>,</p><br/>
+                                    <t t-set="msg_type" t-value="ctx.get('msg_type')"/>
+                                    <h3><t t-out="ctx['msg_title']"/></h3>
+
+                                    <p t-foreach="msg_type" t-as="msg">
+                                        <t t-out="msg"/>
+                                    </p>
+
+                                <p>
+                                    <br/> Please do the needful.</p><br/>
+                                    <p>Please <a t-attf-href="{{ctx['custom_url']}}" target="_blank"><b>Click Here</b></a>  to visit.</p>
+
+                                <p>Thank you</p>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <!-- FOOTER -->
+                      <tr>
+                        <td align="center" style="min-width: 590px;">
+                          <table width="590" border="0" cellpadding="0" bgcolor="#875A7B" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
+                            <tr>
+                              <td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                              <t t-out="object.create_uid.company_id.name or ''">+1 650-123-4567</t><br/>
+                              <t t-out="object.create_uid.company_id.phone or ''"/>
+                              </td>
+                              <td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
+                                <a t-attf-href="'mailto: %s'{{ object.create_uid.company_id.email}}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.email or ''"/><br/>
+                                <a t-attf-href="{{ object.create_uid.company_id.website }}" style="text-decoration:none; color: #999999;" t-out="object.create_uid.company_id.website or ''">http://www.example.com</a>
+
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                </body>
+                </html>
+                ]]>
+        </field>
+    </record>
+</odoo>

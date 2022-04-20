@@ -1,0 +1,159 @@
+<odoo>
+    <!--    Payment Voucher form view, tree view, action and menu item-->
+    <record id="payment_voucher_form_view" model="ir.ui.view">
+        <field name="name">payment.voucher.form.view</field>
+        <field name="model">payment.voucher</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_post"
+                            string="post" type="object"
+                            states="draft,approved"/>
+                    <button name="action_cancel"
+                            string="Cancel" type="object"
+                            states="post" class="btn-danger"
+                            confirm="Are you sure you want to cancel this voucher." />
+                    <button name="approve_transfer" string="Approve" type="object"
+                            class="oe_highlight"
+                            states="waiting_approval"
+                            groups="payment_voucher.group_account_payment_voucher_approval_security"
+                            context="{'action': 'Approved'}"/>
+                    <button name="reject_transfer" string="Reject" type="object"
+                            class="btn-danger"
+                            states="waiting_approval"
+                            groups="payment_voucher.group_account_payment_voucher_approval_security"
+                            context="{'action': 'Rejected'}"/>
+                    <button name="reset_draft"
+                            string="Reset to Draft" type="object"
+                            states="cancel"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="view_je" string="Journal Items" type="object" icon="fa-bars"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+                            <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}" options='{"always_reload": True}' attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+                            <field name="remarks" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <label for="journal_id" groups="account.group_account_readonly" invisible="context.get('default_journal_id') and context.get('move_type', 'entry') != 'entry'"/>
+                            <div name="journal_div" class="d-flex" invisible="context.get('default_journal_id') and context.get('move_type', 'entry') != 'entry'">
+                                <field name="journal_id" groups="account.group_account_readonly" options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <span class="oe_inline o_form_label mx-3 oe_read_only" groups="base.group_multi_currency"> in </span>
+                                <!-- Bigger margin on the left because in edit mode the external link button covers the text -->
+                                <span class="oe_inline o_form_label mr-3 ml-5 oe_edit_only" groups="base.group_multi_currency"> in </span>
+                                <field name="currency_id" groups="base.group_multi_currency" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </div>
+                            <field name="cheque_no" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="amount_in_words" invisible="1"/>
+                            <field name="cheque_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Voucher Lines" name="voucher_lines">
+                            <field name="voucher_lines" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <tree
+                                        string="Voucher Lines"
+                                        editable="bottom"
+                                >
+                                    <field name="account_id" required="1" optional="show"/>
+                                    <field name="label" optional="show"/>
+                                    <field name="partner_id" optional="show"/>
+                                    <field name="analytic_account_id" optional="show"/>
+                                    <field name="net_amount" optional="show"/>
+                                </tree>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                        <label for="amount" />
+                                    </div>
+                                    <field name="amount" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="payment_voucher_tree_view" model="ir.ui.view">
+        <field name="name">payment.voucher.tree.view</field>
+        <field name="model">payment.voucher</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Vouchers" class="o_sale_order" multi_edit="0" sample="1">
+                <field name="name"/>
+                <field name="date" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="journal_id" optional="show"/>
+                <field name="cheque_no" optional="show"/>
+                <field name="cheque_date" optional="show"/>
+                <field name="amount" optional="show"/>
+                <field name="state" widget="badge" optional="show"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="remarks" optional="hide"/>
+                <field name="approved_by" optional="hide"/>
+                <field name="approve_Date" optional="hide"/>
+                <field name="comment" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="payment_voucher_search_view" model="ir.ui.view">
+        <field name="name">payment.voucher.search</field>
+        <field name="model">payment.voucher</field>
+        <field name="arch" type="xml">
+            <search string="Payment Voucher">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="cheque_no"/>
+                <field name="cheque_date"/>
+                <field name="state"/>
+                <group expand="1" string="Group By" name="report_group_by">
+                    <filter string="Date" name="Date" context="{'group_by':'date'}"/>
+                    <filter string="Voucher Number" name="Number" context="{'group_by':'name'}"/>
+                    <filter string="Partner" name="Partner" context="{'group_by':'partner_id'}"/>
+                    <filter string="Cheque Number" name="Cheque Number" context="{'group_by':'cheque_no'}"/>
+                    <filter string="Cheque Date" name="Cheque Date" context="{'group_by':'cheque_date'}"/>
+                    <filter string="Status" name="Status" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="payment_voucher_action" model="ir.actions.act_window">
+        <field name="name">Payment Voucher</field>
+        <field name="res_model">payment.voucher</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="payment_voucher_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Payment Voucher
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="payment_voucher_menu"
+              name="Payment Vouchers"
+              sequence="23"
+              parent="account.menu_finance_payables"
+              action="payment_voucher_action"/>
+
+</odoo>
