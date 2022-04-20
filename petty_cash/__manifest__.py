@@ -11,6 +11,9 @@
         'data/mail_template.xml',
         'data/ir_sequence.xml',
 
+        'reports/cash_out_payment_voucher.xml',
+        'reports/reimbursement_payment_voucher.xml',
+
         'security/security.xml',
         'security/access_rules.xml',
         'security/ir.model.access.csv',

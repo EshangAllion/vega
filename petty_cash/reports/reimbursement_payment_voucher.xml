@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="reimburse_payment_voucher_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: 'Roboto', sans-serif;">
+                        <table width="100%">
+                            <tr><td class="text-left" style="padding-left:5px"><h3><span><b><span t-field="o.company_id.name"/></b></span></h3></td></tr>
+                            <tr><td class="text-left" style="padding-left:5px">&#160;<span><span t-field="o.company_id.street"/>, <span t-field="o.company_id.street2"/>, <span t-field="o.company_id.city"/>, <span t-field="o.company_id.country_id"/></span></td></tr>
+                            <tr><td class="text-left" style="padding-left:5px;">&#160;Tel - &#160;<span t-field="o.company_id.phone"/> | Email :&#160;<span t-field="o.company_id.email"/></td></tr>
+                            <tr><td class="text-left" style="padding-left:5px;">&#160;Email - &#160;<span t-field="o.company_id.phone"/></td></tr>
+                        </table>
+                        <br/>
+                        <table width="100%">
+                            <tr>
+                                <td width="20%">&#160;</td>
+                                <td width="30%">&#160;</td>
+                                <td width="20%">&#160;</td>
+                                <td colspan="2" style="font-size: 16px">Payment Voucher</td>
+                            </tr>
+                            <tr>
+                                <td width="20%"><b>&#160;</b></td>
+                                <td width="30%">&#160;</td>
+                                <td width="20%">&#160;</td>
+                                <td class="text-center" width="10%" style="padding-left:5px; border:solid 1px">Date</td>
+                                <td class="text-center" width="20%" style="padding-left:5px; border:solid 1px"><span t-field="o.cash_date"/></td>
+                            </tr>
+                            <tr>
+                                <td>Pay to the order of</td>
+                                <td><u><span t-field="o.employee_id"/></u></td>
+                                <td>&#160;</td>
+                                <td class="text-center" style="padding-left:5px; border:solid 1px">Voucher No</td>
+                                <td class="text-center" style="padding-left:5px; border:solid 1px"><span t-field="o.name"/></td>
+                            </tr>
+                            <tr>
+                                <td>Bank Account </td>
+                                <td><u><span t-field="o.petty_cash_id.journal_id"/></u></td>
+                                <td>&#160;</td>
+                                <t t-if="o.cheque_no">
+                                    <td class="text-center" style="padding-left:5px; border:solid 1px">Cheque No</td>
+                                    <td class="text-center" style="padding-left:5px; border:solid 1px"><span t-field="o.cheque_no"/></td>
+                                </t>
+                                <t t-else="">
+                                    <td colspan="2"/>
+                                </t>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table width="100%" style="border: 1px solid black; height:450px;margin-top:5px;">
+                            <tr>
+                                <td class="text-center" width="30%" style="padding-left:5px; border:solid 1px; height:5px"><b>Account</b></td>
+                                <td class="text-center" width="50%" style="padding-left:5px; border:solid 1px; height:5px"><b>Memo</b></td>
+                                <td class="text-center" width="20%" style="padding-left:5px; border:solid 1px; height:5px"><b>Net Amt</b></td>
+                            </tr>
+
+                                <tr>
+                                    <td class="text-left" style="padding-left:5px; padding-right:5px; height:5px; border-right:solid 1px;"><span t-field="o.employee_id.address_home_id.property_account_payable_id"/></td>
+                                    <td class="text-left" style="padding-left:5px; padding-right:5px; height:5px; border-right:solid 1px;"><span t-field="o.remarks"/></td>
+                                    <td class="text-right" style="padding-left:5px; padding-right:5px; height:5px; border-right:solid 1px;"><span t-esc="'{0:,.2f}'.format(o.expensed_amount)"/></td>
+                                </tr>
+
+                            <tr>
+                                <th class="text-left" style="padding-left:5px; border-right:solid 1px;">&#160;</th>
+                                <th class="text-right" style="padding-left:5px; border-right:solid 1px;">&#160;</th>
+                                <th class="text-right" style="padding-left:5px; border-right:solid 1px;">&#160;</th>
+                            </tr>
+                        </table>
+                        <table width="100%" style="margin-top:5px;">
+                            <tr>
+                                <td class="text-center" width="60%" style="padding-left:5px; height:5px">&#160;</td>
+                                <td class="text-center" width="20%" style="padding-left:5px; border:solid 1px; height:5px">Total Expense</td>
+                                <td class="text-right" width="20%" style="padding-right:5px; border:solid 1px; height:5px"><span t-esc="'{0:,.2f}'.format(o.expensed_amount)"/></td>
+                            </tr>
+                        </table>
+                        <table width="100%" style="margin-top:5px;">
+                            <tr>
+                                <td class="text-center" width="20%" style="padding-left:5px; border:solid 1px; height:5px">Amount In Words</td>
+                                <td class="text-center" width="5%" style="padding-left:5px; height:5px">&#160;</td>
+                                <td class="text-left" width="75%" style="padding-left:5px; border-bottom:solid 1px; height:5px"><span t-esc="o.currency_id.amount_to_text(o.expensed_amount)"/></td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="width:100%">
+
+
+                            <tr>
+                                <td class="text-center" style="border-dashed:1px solid; width:30%">
+                                    <div t-if="o.create_uid.signature"  >
+                                        <div widget="html" t-field="o.create_uid.signature"/>
+                                    </div>
+                                </td>
+                                <td style="width:5%">&#160;</td>
+                                <td class="text-center" style="border-dashed:1px solid; width:30%">
+                                    <div t-if="o.checked_by"  >
+                                        <div widget="html" t-field="o.checked_by.signature"/>
+                                    </div>
+                                    <div t-else="">
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                </td>
+                                <td style="width:5%">&#160;</td>
+                                <td class="text-center" style="border-dashed:1px solid; width:30%">
+                                    <div t-if="o.approved_by.signature" >
+                                        <div widget="html" t-field="o.approved_by.signature"/>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">Prepared by</td>
+                                <td class="text-center">&#160;</td>
+                                <td class="text-center"> Authorized by</td>
+                                <td class="text-center">&#160;</td>
+                                <td class="text-center">Received by</td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <record id="action_petty_cash_reimburse_payment_voucher" model="ir.actions.report">
+        <field name="name">Payment Voucher</field>
+        <field name="model">petty.cash.out</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">petty_cash.reimburse_payment_voucher_report</field>
+        <field name="report_file">petty_cash.reimburse_payment_voucher_report</field>
+        <field name="binding_model_id" ref="model_petty_cash_out"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
